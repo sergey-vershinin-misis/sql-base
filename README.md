@@ -155,17 +155,17 @@ from (
 	   cl.cli_name, cl.cli_email, cl.cli_phone, cl.cli_secret, 
 	   c.c_token, c.c_pin, c.c_gen, c.c_type
 	from 
-		order_components oc 
-		join staff s on s.staff_id = oc.staff_id
-		join client cl on cl.cli_name = oc.cli_name
-		join orders o on o.order_pk = oc.order_pk
-		join cargo2 c on c.c_id = oc.c_id)
+	   order_components oc 
+ 	   join staff s on s.staff_id = oc.staff_id
+ 	   join client cl on cl.cli_name = oc.cli_name
+           join orders o on o.order_pk = oc.order_pk
+ 	   join cargo2 c on c.c_id = oc.c_id)
 ```
 ### 5. Вынос значений order_list из массива в отдельную таблицу
 ```sql
 select 
-	order_pk, 
-	uuid(replace(unnest(order_list),'''','')) as order_element_id
+   order_pk, 
+   uuid(replace(unnest(order_list),'''','')) as order_element_id
 into order_elements
 from orders
 ```
