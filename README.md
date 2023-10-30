@@ -188,3 +188,21 @@ alter table orders add primary key (order_pk)
 alter table order_elements add primary key (order_element_id)
 ```
 
+
+```sql
+alter table order_elements 
+  add constraint fk_order_elements_orders foreign key (order_pk) references orders (order_pk)
+
+alter table order_components 
+  add constraint fk_components_orders foreign key (order_pk) references orders (order_pk)
+
+alter table order_components 
+  add constraint fk_components_staff foreign key (staff_id) references staff (staff_id)
+
+alter table order_components 
+  add constraint fk_components_client foreign key (cli_name) references client (cli_name)
+
+alter table order_components 
+  add constraint fk_components_cargo foreign key (c_id) references cargo (c_id)
+```
+
