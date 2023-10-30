@@ -175,6 +175,31 @@ alter table orders
 drop column order_list
 ```
 
+Проверим, что можем собрать исходный набор данных с помощью JOIN-ов
+```sql
+select count(*) 
+from (
+	select 
+	   s.staf_name, s.staff_age, s.staff_id, s.staff_lang, 
+	   o.order_pk, o.order_address, o.order_country, o.order_company, o.order_price, o.order_dt, array_agg(oe.order_element_id) as order_list,
+	   cl.cli_name, cl.cli_email, cl.cli_phone, cl.cli_secret, 
+	   c.c_token, c.c_pin, c.c_gen, c.c_type
+	from 
+	   order_components oc 
+	   join staff s on s.staff_id = oc.staff_id
+	   join client cl on cl.cli_name = oc.cli_name
+	   join orders o on o.order_pk = oc.order_pk
+	   left join order_elements oe on oe.order_pk = o.order_pk
+	   join cargo c on c.c_id = oc.c_id
+	group by
+	   s.staf_name, s.staff_age, s.staff_id, s.staff_lang, 
+	   o.order_pk, o.order_address, o.order_country, o.order_company, o.order_price, o.order_dt,
+	   cl.cli_name, cl.cli_email, cl.cli_phone, cl.cli_secret, 
+	   c.c_token, c.c_pin, c.c_gen, c.c_type
+)
+```
+
+
 ### 6.
 ```sql
 alter table staff add primary key (staff_id)
