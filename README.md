@@ -160,6 +160,5 @@ from (
 		join client cl on cl.cli_name = oc.cli_name
 		join orders o on o.order_pk = oc.order_pk
 		join cargo2 c on c.c_id = oc.c_id)
-)
 ```
 ### 5. Вынос значений order_list из массива в отдельную таблицу
