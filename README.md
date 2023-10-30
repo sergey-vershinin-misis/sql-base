@@ -174,3 +174,17 @@ from orders
 alter table orders 
 drop column order_list
 ```
+
+### 6.
+```sql
+alter table staff add primary key (staff_id)
+
+alter table client add primary key (cli_name)
+
+alter table cargo add primary key (c_id)
+
+alter table orders add primary key (order_pk)
+
+alter table order_elements add primary key (order_element_id)
+```
+
