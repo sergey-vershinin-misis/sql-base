@@ -46,31 +46,20 @@ select count(*) from sample
 ```
 select 
    coalesce (s.staf_name, (select inner_s.staf_name from sample inner_s where inner_s.staf_name is not null and inner_s.staff_id = s.staff_id limit 1)) as staf_name, 
-   s.staff_age, 
-   s.staff_id,  
-   s.staff_lang, 
+   s.staff_age, s.staff_id, s.staff_lang, 
    
    coalesce (s.order_pk, 
       (select inner_s.order_pk from sample inner_s where inner_s.order_pk is not null and inner_s.order_list = s.order_list limit 1), 
       (select inner_s.order_pk from sample inner_s where inner_s.order_pk is not null and inner_s.order_address = s.order_address and inner_s.order_country = s.order_country and inner_s.order_company = s.order_company limit 1)) as order_pk,
-   s.order_address, 
-   s.order_country, 
-   s.order_company, 
-   s.order_price,
-   s.order_dt,
-   s.order_list,
+   s.order_address, s.order_country, s.order_company, s.order_price, s.order_dt, s.order_list,
    
    coalesce (s.cli_name, (select inner_s.cli_name from sample inner_s where inner_s.cli_name is not null and inner_s.cli_email = s.cli_email limit 1)) as cli_name,
-   s.cli_email, 
-   s.cli_phone, 
-   s.cli_secret, 
+   s.cli_email, s.cli_phone, s.cli_secret, 
    
    coalesce (s.c_token, 
        (select inner_s.c_token from sample inner_s where inner_s.c_token is not null and inner_s.c_pin = s.c_pin limit 1),
        (concat('generated_', cast (c_pin as varchar)))) as c_token,
-   s.c_pin,
-   s.c_gen,
-   s.c_type
+   s.c_pin, s.c_gen, s.c_type
 into sample_unnulled1
 from sample s
 ```
@@ -99,12 +88,35 @@ select
    coalesce (s.c_pin, (select inner_s.c_pin from sample_unnulled2 inner_s where inner_s.c_pin is not null and inner_s.c_token = s.c_token limit 1)) as c_pin,
    coalesce (s.c_gen, (select inner_s.c_gen from sample_unnulled2 inner_s where inner_s.c_gen is not null and inner_s.c_token = s.c_token limit 1)) as c_gen,
    coalesce (s.c_type, (select inner_s.c_type from sample_unnulled2 inner_s where inner_s.c_type is not null and inner_s.c_token = s.c_token limit 1)) as c_type
+into sample_unnulled2
+from sample_unnulled1 s
+```
+
+### 3. Создание поля для первичного ключа груза (cargo)
+Генерируем порядковый номер записи в исходном датасете с помощью row_number()
+```
+select 
+   s.staf_name, s.staff_age, s.staff_id, s.staff_lang, 
+   s.order_pk, s.order_address, s.order_country, s.order_company, s.order_price, s.order_dt, s.order_list,
+   s.cli_name, s.cli_email, s.cli_phone, s.cli_secret, 
+      
+   row_number() over() as c_id,
+   s.c_token, s.c_pin, s.c_gen, s.c_type
 into sample_unnulled3
 from sample_unnulled2 s
 ```
+После этого заменяем значения в c_id, на одинаковый для всех записей, где поля груза одинаковы
+```
+select 
+   s.staf_name, s.staff_age, s.staff_id, s.staff_lang, 
+   s.order_pk, s.order_address, s.order_country, s.order_company, s.order_price, s.order_dt, s.order_list,
+   s.cli_name, s.cli_email, s.cli_phone, s.cli_secret, 
+   
+   min(s.c_id) over (partition by s.c_token, s.c_pin, s.c_gen, s.c_type) as c_id,
+   s.c_token, s.c_pin, s.c_gen, s.c_type
+into sample_unnulled4
+from sample_unnulled3 s
+```
 
-
-
-### 3. Создание поля для первичного ключа груза (cargo)
 ### 4. Формирование таблиц для сотрудников, клиентов, заказов и грузов, а также таблицы связи
 ### 5. Вынос значений order_list из массива в отдельную таблицу
