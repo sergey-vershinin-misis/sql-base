@@ -117,6 +117,21 @@ select
 into sample_unnulled4
 from sample_unnulled3 s
 ```
-
 ### 4. Формирование таблиц для сотрудников, клиентов, заказов и грузов, а также таблицы связи
+Формируем таблицу с сотрудниками
+```
+select distinct staf_name, staff_age, staff_id, staff_lang into staff from sample_unnulled4
+```
+Формируем таблицу с клиентами
+```
+select distinct cli_name, cli_email, cli_phone, cli_secret into client from sample_unnulled4
+```
+Формируем таблицу с грузами
+```
+select distinct с_id, c_token, c_pin, c_gen, c_type into cargo from sample_unnulled4
+```
+Формируем таблицу с заказами
+```
+select distinct order_pk, order_address, order_country, order_company, order_price, order_dt, order_list into orders from sample_unnulled4
+```
 ### 5. Вынос значений order_list из массива в отдельную таблицу
