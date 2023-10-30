@@ -130,30 +130,32 @@ into sample_unnulled4
 from sample_unnulled3 s
 ```
 ### 4. Формирование таблиц для сотрудников, клиентов, заказов и грузов, а также таблицы связи
-Формируем таблицу с сотрудниками
+Когда вся предварительная обработка исходной таблицы завершена, разобъем ее на отдельные сущности:
+- таблицу с сотрудниками;
 ```sql
 select distinct staf_name, staff_age, staff_id, staff_lang into staff from sample_unnulled4
 ```
-Формируем таблицу с клиентами
+- таблицу с клиентами;
 ```sql
 select distinct cli_name, cli_email, cli_phone, cli_secret into client from sample_unnulled4
 ```
-Формируем таблицу с грузами
+- таблицу с грузами;
 ```sql
 select distinct с_id, c_token, c_pin, c_gen, c_type into cargo from sample_unnulled4
 ```
-Формируем таблицу с заказами
+- таблицу с заказами.
 ```sql
 select distinct order_pk, order_address, order_country, order_company, order_price, order_dt, order_list
 into orders
 from sample_unnulled4
 ```
 
+Также сформируем таблицу, строки которой задают связи сформированных выше сущностей, объединяющие их в исходный датасет
 ```sql
 select distinct order_pk, staff_id, cli_name, c_id into order_components from sample_unnulled4
 ```
 
-Дополнительно проверим, что соединение полученных таблицк дает исходный набор данных (мы сравним только количество записей и убедимся, что их 200 000)
+Чтобы убедиться, что разделение прошло корректно и никакие новые данные не добавились (и не удалились имеющиеся), дополнительно проверим, что соединение полученных таблиц дает исходный набор данных (мы сравним только количество записей и убедимся, что их 200 000)
 ```sql
 select count(*) 
 from (
