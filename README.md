@@ -137,7 +137,8 @@ select distinct с_id, c_token, c_pin, c_gen, c_type into cargo from sample_unnu
 ```
 Формируем таблицу с заказами
 ```sql
-select distinct order_pk, order_address, order_country, order_company, order_price, order_dt, order_list into orders
+select distinct order_pk, order_address, order_country, order_company, order_price, order_dt, order_list
+into orders
 from sample_unnulled4
 ```
 
@@ -151,7 +152,8 @@ select count(*)
 from (
 	select 
 	   s.staf_name, s.staff_age, s.staff_id, s.staff_lang, 
-	   o.order_pk, o.order_address, o.order_country, o.order_company, o.order_price, o.order_dt, o.order_list,
+	   o.order_pk, o.order_address, o.order_country, o.order_company,
+	   o.order_price, o.order_dt, o.order_list,
 	   cl.cli_name, cl.cli_email, cl.cli_phone, cl.cli_secret, 
 	   c.c_token, c.c_pin, c.c_gen, c.c_type
 	from 
@@ -181,7 +183,8 @@ select count(*)
 from (
 	select 
 	   s.staf_name, s.staff_age, s.staff_id, s.staff_lang, 
-	   o.order_pk, o.order_address, o.order_country, o.order_company, o.order_price, o.order_dt, array_agg(oe.order_element_id) as order_list,
+	   o.order_pk, o.order_address, o.order_country, o.order_company, o.order_price,
+	   o.order_dt, array_agg(oe.order_element_id) as order_list,
 	   cl.cli_name, cl.cli_email, cl.cli_phone, cl.cli_secret, 
 	   c.c_token, c.c_pin, c.c_gen, c.c_type
 	from 
