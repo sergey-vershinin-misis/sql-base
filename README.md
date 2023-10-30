@@ -137,7 +137,8 @@ select distinct с_id, c_token, c_pin, c_gen, c_type into cargo from sample_unnu
 ```
 Формируем таблицу с заказами
 ```sql
-select distinct order_pk, order_address, order_country, order_company, order_price, order_dt, order_list into orders from sample_unnulled4
+select distinct order_pk, order_address, order_country, order_company, order_price, order_dt, order_list into orders
+from sample_unnulled4
 ```
 
 ```sql
