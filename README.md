@@ -144,4 +144,22 @@ from sample_unnulled4
 ```sql
 select distinct order_pk, staff_id, cli_name, c_id into order_components from sample_unnulled4
 ```
+
+Дополнительно проверим, что соединение полученных таблицк дает исходный набор данных (мы сравним только количество записей и убедимся, что их 200 000)
+```sql
+select count(*) 
+from (
+	select 
+	   s.staf_name, s.staff_age, s.staff_id, s.staff_lang, 
+	   o.order_pk, o.order_address, o.order_country, o.order_company, o.order_price, o.order_dt, o.order_list,
+	   cl.cli_name, cl.cli_email, cl.cli_phone, cl.cli_secret, 
+	   c.c_token, c.c_pin, c.c_gen, c.c_type
+	from 
+		order_components oc 
+		join staff s on s.staff_id = oc.staff_id
+		join client cl on cl.cli_name = oc.cli_name
+		join orders o on o.order_pk = oc.order_pk
+		join cargo2 c on c.c_id = oc.c_id)
+)
+```
 ### 5. Вынос значений order_list из массива в отдельную таблицу
