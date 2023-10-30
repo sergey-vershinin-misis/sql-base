@@ -162,3 +162,10 @@ from (
 		join cargo2 c on c.c_id = oc.c_id)
 ```
 ### 5. Вынос значений order_list из массива в отдельную таблицу
+```sql
+select 
+	order_pk, 
+	uuid(replace(unnest(order_list),'''','')) as order_element_id
+into order_elements
+from orders
+```
