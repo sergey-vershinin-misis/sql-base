@@ -94,7 +94,7 @@ from sample_unnulled1 s
 
 В конце проверим, что в таблице нет дубликатов (запрос должен вернуть наши 200 000): 
 ```sql
-select count(*) from (select * from sample_unnulled2)
+select count(*) from (select distinct * from sample_unnulled2)
 ```
 
 ### 3. Создание поля для первичного ключа груза (cargo)
