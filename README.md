@@ -92,6 +92,11 @@ into sample_unnulled2
 from sample_unnulled1 s
 ```
 
+В конце проверим, что в таблице нет дубликатов (запрос должен вернуть наши 200 000): 
+```sql
+select count(*) from (select * from sample_unnulled2)
+```
+
 ### 3. Создание поля для первичного ключа груза (cargo)
 Генерируем порядковый номер записи в исходном датасете с помощью row_number()
 ```sql
@@ -136,6 +141,6 @@ select distinct order_pk, order_address, order_country, order_company, order_pri
 ```
 
 ```sql
-select distinct order_pk, staff_id, cli_name, c_id into order_components from sample_unnulled5
+select distinct order_pk, staff_id, cli_name, c_id into order_components from sample_unnulled4
 ```
 ### 5. Вынос значений order_list из массива в отдельную таблицу
