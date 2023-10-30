@@ -169,3 +169,8 @@ select
 into order_elements
 from orders
 ```
+
+```sql
+alter table orders 
+drop column order_list
+```
