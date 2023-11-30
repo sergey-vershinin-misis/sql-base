@@ -42,6 +42,7 @@ set cli_id = (select c.cli_id from client_new c where oc.cli_name = c.cli_name l
 
 снимаем ограничение внешнего ключа в таблице order_components для таблицы client,
 подменяем client на client_new, а старый client удаляем
+устанавливаем ограничение внешнего ключа на связь с client по cli_id, а поле cli_name удаляем
 ```sql
 alter table order_components 
   drop constraint fk_components_client
@@ -53,4 +54,7 @@ rename to client
 
 alter table order_components 
   add constraint fk_components_client foreign key (cli_id) references client (cli_id)
+
+alter table order_components 
+  drop column cli_name
 ```
